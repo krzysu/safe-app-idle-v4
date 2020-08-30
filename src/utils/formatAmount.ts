@@ -16,10 +16,10 @@ const lt100mFormatter = new Intl.NumberFormat([], { maximumFractionDigits: 0 });
 const lt1000tFormatter = new Intl.NumberFormat([], {
   maximumFractionDigits: 3,
   notation: "compact",
-});
+} as any);
 
-export const formatAmount = (number) => {
-  let numberFloat = parseFloat(number);
+export const formatAmount = (number: string): string => {
+  let numberFloat: number | string = parseFloat(number);
 
   if (numberFloat === 0) {
     numberFloat = "0";

@@ -1,10 +1,18 @@
 import { ethers } from "ethers";
 import * as utils from "./utils";
-import { FORM_DEPOSIT, FORM_WITHDRAW } from "./const";
+import { Form, Strategy, Token, TokenData } from "./types";
 
-const testToken = {
-  strategyId: "maxYield",
-  tokenId: "dai",
+const common = {
+  address: "",
+  decimals: 18,
+  logo: "",
+  isPaused: false,
+};
+
+const testToken: TokenData = {
+  ...common,
+  strategyId: Strategy.BestYield,
+  tokenId: Token.DAI,
   tokenPrice: ethers.BigNumber.from("0x0de7a2c23b812d04"),
   avgAPR: ethers.BigNumber.from("0x2879fd0f45b6d344"), // 2.92
   underlying: {
@@ -18,9 +26,10 @@ const testToken = {
 };
 
 // different decimals
-const testTokenUsdc = {
-  strategyId: "maxYield",
-  tokenId: "usdc",
+const testTokenUsdc: TokenData = {
+  ...common,
+  strategyId: Strategy.BestYield,
+  tokenId: Token.USDC,
   tokenPrice: ethers.BigNumber.from("0x0f4b5c"),
   avgAPR: ethers.BigNumber.from("0x30da33c43adca121"), // 3.52
   underlying: {
@@ -34,9 +43,10 @@ const testTokenUsdc = {
 };
 
 // not rounded deposit
-const testTokenUsdt = {
-  strategyId: "maxYield",
-  tokenId: "usdt",
+const testTokenUsdt: TokenData = {
+  ...common,
+  strategyId: Strategy.BestYield,
+  tokenId: Token.USDT,
   tokenPrice: ethers.BigNumber.from("0x0de7a2c23b812d04"),
   avgAPR: ethers.BigNumber.from("0x34a393b31ce0586b"),
   underlying: {
@@ -52,7 +62,7 @@ const testTokenUsdt = {
 describe("utils", () => {
   test("getIdleTokenId", () => {
     expect(utils.getIdleTokenId(testToken.strategyId, testToken.tokenId)).toBe(
-      "maxYield_dai"
+      "BestYield_0"
     );
   });
 
@@ -90,33 +100,33 @@ describe("utils", () => {
   });
 
   test("calculateMaxAmountBN", () => {
-    expect(utils.calculateMaxAmountBN(FORM_DEPOSIT, testToken).toFixed()).toBe(
+    expect(utils.calculateMaxAmountBN(Form.Deposit, testToken).toFixed()).toBe(
       "84.046761533252477283"
     );
-    expect(utils.calculateMaxAmountBN(FORM_WITHDRAW, testToken).toFixed()).toBe(
+    expect(utils.calculateMaxAmountBN(Form.Withdraw, testToken).toFixed()).toBe(
       "15.00000000000000095847250313002091538"
     );
 
     expect(
-      utils.calculateMaxAmountBN(FORM_DEPOSIT, testTokenUsdc).toFixed()
+      utils.calculateMaxAmountBN(Form.Deposit, testTokenUsdc).toFixed()
     ).toBe("94.020987");
     expect(
-      utils.calculateMaxAmountBN(FORM_WITHDRAW, testTokenUsdc).toFixed()
+      utils.calculateMaxAmountBN(Form.Withdraw, testTokenUsdc).toFixed()
     ).toBe("5.00000000000000052868026");
 
     expect(
-      utils.calculateMaxAmountBN(FORM_DEPOSIT, testTokenUsdt).toFixed()
+      utils.calculateMaxAmountBN(Form.Deposit, testTokenUsdt).toFixed()
     ).toBe("74.255845191656704952");
     expect(
-      utils.calculateMaxAmountBN(FORM_WITHDRAW, testTokenUsdt).toFixed()
+      utils.calculateMaxAmountBN(Form.Withdraw, testTokenUsdt).toFixed()
     ).toBe("24.75194839721890005471878532481859862");
   });
 
-  test("calculateRealAmountWei FORM_DEPOSIT", () => {
+  test("calculateRealAmountWei Form.Deposit", () => {
     // get maxAmount, then calculateRealAmountWei, and compare with token balance
-    const maxAmountBN = utils.calculateMaxAmountBN(FORM_DEPOSIT, testToken);
+    const maxAmountBN = utils.calculateMaxAmountBN(Form.Deposit, testToken);
     const amountWei = utils.calculateRealAmountWei(
-      FORM_DEPOSIT,
+      Form.Deposit,
       testToken,
       maxAmountBN
     );
@@ -124,25 +134,22 @@ describe("utils", () => {
     // make sure that numbers are the same formatted and in hex
     console.log(
       {
-        amountWei: utils.formatToken(
-          {
-            balance: amountWei,
-            decimals: testToken.underlying.decimals,
-          },
-          { precision: 18 }
-        ),
-        amountMax: utils.formatToken(testToken.underlying, { precision: 18 }),
+        amountWei: utils.formatToken({
+          balance: amountWei,
+          decimals: testToken.underlying.decimals,
+        }),
+        amountMax: utils.formatToken(testToken.underlying),
       },
-      FORM_DEPOSIT
+      Form.Deposit
     );
 
     expect(amountWei).toEqual(testToken.underlying.balance);
   });
 
-  test("calculateRealAmountWei FORM_WITHDRAW", () => {
-    const maxAmountBN = utils.calculateMaxAmountBN(FORM_WITHDRAW, testToken);
+  test("calculateRealAmountWei Form.Withdraw", () => {
+    const maxAmountBN = utils.calculateMaxAmountBN(Form.Withdraw, testToken);
     const amountWei = utils.calculateRealAmountWei(
-      FORM_WITHDRAW,
+      Form.Withdraw,
       testToken,
       maxAmountBN
     );
@@ -150,13 +157,13 @@ describe("utils", () => {
     // make sure that numbers are the same formatted and in hex
     console.log(
       {
-        amountWei: utils.formatToken(
-          { balance: amountWei, decimals: testToken.idle.decimals },
-          { precision: 18 }
-        ),
-        amountMax: utils.formatToken(testToken.idle, { precision: 18 }),
+        amountWei: utils.formatToken({
+          balance: amountWei,
+          decimals: testToken.idle.decimals,
+        }),
+        amountMax: utils.formatToken(testToken.idle),
       },
-      FORM_WITHDRAW
+      Form.Withdraw
     );
 
     expect(amountWei).toEqual(testToken.idle.balance);
