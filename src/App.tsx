@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Transaction } from "@gnosis.pm/safe-apps-sdk";
 import { Button, Loader, Text, Title } from "@gnosis.pm/safe-react-components";
-import { useSafeApp } from "./SafeAppProvider";
+import { useSafeApp } from "./providers/SafeAppProvider";
 
 const Container = styled.form`
   margin-bottom: 2rem;
