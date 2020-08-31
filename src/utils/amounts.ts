@@ -1,12 +1,7 @@
-import { ethers, BigNumberish } from "ethers";
+import { ethers } from "ethers";
 import BigNumber from "bignumber.js";
 import { formatAmount } from "./formatAmount";
-import { Form, Strategy, Token, TokenData } from "./types";
-
-interface Balance {
-  balance: BigNumberish;
-  decimals: number;
-}
+import { Balance, Form, Strategy, Token, TokenData } from "./types";
 
 const balanceToBN = ({ balance, decimals }: Balance): BigNumber => {
   const balanceString = ethers.utils.formatUnits(balance, decimals);
@@ -24,7 +19,7 @@ export const getIdleTokenId = (strategyId: Strategy, tokenId: Token) =>
 export const formatToken = ({ balance, decimals }: Balance): string =>
   formatAmount(balanceToBN({ balance, decimals }).toFixed());
 
-export const formatAPR = (balance: BigNumberish) =>
+export const formatAPR = (balance: ethers.BigNumber) =>
   `${balanceToBN({ balance, decimals: 18 }).toFixed(2)}%`;
 
 export const tokenPriceToBN = (token: TokenData) =>

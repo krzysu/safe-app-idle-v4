@@ -1,4 +1,4 @@
-import { BigNumberish } from "ethers";
+import { ethers } from "ethers";
 
 export enum Strategy {
   BestYield = "BestYield",
@@ -33,16 +33,15 @@ export interface TokenBasicData {
   tokenId: Token;
 }
 
+export interface Balance {
+  balance: ethers.BigNumber;
+  decimals: number;
+}
+
 export interface TokenData extends TokenBasicData {
   isPaused: boolean;
-  tokenPrice: BigNumberish;
-  avgAPR: BigNumberish;
-  underlying: {
-    balance: BigNumberish;
-    decimals: number;
-  };
-  idle: {
-    balance: BigNumberish;
-    decimals: number;
-  };
+  tokenPrice: ethers.BigNumber;
+  avgAPR: ethers.BigNumber;
+  underlying: Balance;
+  idle: Balance;
 }
