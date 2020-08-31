@@ -1,22 +1,14 @@
 import tokenToLogoMap from "./tokenToLogoMap";
-import { Strategy, Token, TokenBasicData } from "./types";
+import {
+  Strategy,
+  Token,
+  TokenBasicData,
+  TokenSelectItem,
+  StrategySelectItem,
+} from "./types";
 
 import maxYieldSrc from "../assets/best-on.svg";
 import riskAdjustedSrc from "../assets/risk-on.svg";
-
-export interface TokenSelectItem {
-  id: Token;
-  label: string;
-  iconUrl: string;
-  strategies: Strategy[];
-}
-
-export interface StrategySelectItem {
-  id: Strategy;
-  label: string;
-  iconUrl: string;
-  tokens: Token[];
-}
 
 const toArray = (obj: Record<string, TokenBasicData>): TokenBasicData[] =>
   Object.keys(obj).map((key) => obj[key]);

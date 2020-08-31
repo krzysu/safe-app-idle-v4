@@ -1,7 +1,6 @@
 import React, { useMemo } from "react";
 import { Select } from "@gnosis.pm/safe-react-components";
-import { StrategySelectItem } from "../utils/buildSelectItems";
-import { Token } from "../utils/types";
+import { Token, StrategySelectItem } from "../utils/types";
 
 type Props = {
   onChange: (id: string) => void;

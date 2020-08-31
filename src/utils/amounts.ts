@@ -8,7 +8,7 @@ const balanceToBN = ({ balance, decimals }: Balance): BigNumber => {
   return BNify(balanceString);
 };
 
-const parseUnits = (valueString: string, decimals: number) =>
+const parseUnits = (valueString: string, decimals: number): ethers.BigNumber =>
   ethers.utils.parseUnits(valueString, decimals);
 
 export const BNify = (s: string | number) => new BigNumber(String(s));

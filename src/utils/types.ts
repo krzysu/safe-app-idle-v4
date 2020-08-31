@@ -45,3 +45,31 @@ export interface TokenData extends TokenBasicData {
   underlying: Balance;
   idle: Balance;
 }
+
+export interface TxData {
+  tokenId: Token;
+  strategyId: Strategy;
+  amountWei: string;
+}
+
+export interface TokenSelectItem {
+  id: Token;
+  label: string;
+  iconUrl: string;
+  strategies: Strategy[];
+}
+
+export interface StrategySelectItem {
+  id: Strategy;
+  label: string;
+  iconUrl: string;
+  tokens: Token[];
+}
+
+export interface State {
+  tokens: Record<string, TokenData>;
+  tokenSelectItems: TokenSelectItem[];
+  strategySelectItems: StrategySelectItem[];
+  currentTokenId: Token;
+  currentStrategyId: Strategy;
+}

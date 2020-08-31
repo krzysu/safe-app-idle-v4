@@ -11,7 +11,13 @@ import {
   formatAPR,
   formatDepositBalance,
 } from "../utils/amounts";
-import { Form as FormType, TokenData, Token, Strategy } from "../utils/types";
+import {
+  Form as FormType,
+  TokenData,
+  Token,
+  Strategy,
+  State,
+} from "../utils/types";
 
 import styles from "./Form.module.css";
 
@@ -32,10 +38,10 @@ const getFormTokenBalance = (formToken: TokenData, formType: FormType) => {
 
 // TODO fix types
 type Props = {
-  state: any;
+  state: State;
   onSubmit: any;
   onBackClick: any;
-  updateTokenPrice: any;
+  updateTokenPrice?: any;
   formType: FormType;
 };
 
