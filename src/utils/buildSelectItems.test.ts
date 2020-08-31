@@ -3,7 +3,7 @@ import {
   buildStrategySelectItems,
 } from "./buildSelectItems";
 import tokens from "./tokens";
-import { getIdleTokenId } from "./utils";
+import { getIdleTokenId } from "./amounts";
 import { Strategy, Token, TokenBasicData } from "./types";
 
 const testTokens = tokens["mainnet"].reduce((acc, item) => {

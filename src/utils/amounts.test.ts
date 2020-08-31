@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import * as utils from "./utils";
+import * as utils from "./amounts";
 import { Form, Strategy, Token, TokenData } from "./types";
 
 const common = {
@@ -59,7 +59,7 @@ const testTokenUsdt: TokenData = {
   },
 };
 
-describe("utils", () => {
+describe("amounts", () => {
   test("getIdleTokenId", () => {
     expect(utils.getIdleTokenId(testToken.strategyId, testToken.tokenId)).toBe(
       "BestYield_dai"

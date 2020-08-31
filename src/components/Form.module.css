@@ -1,0 +1,53 @@
+.form {
+  margin-bottom: 2rem;
+  width: 100%;
+  max-width: 480px;
+
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-column-gap: 1rem;
+  grid-row-gap: 1rem;
+}
+
+@media screen and (min-width: 420px) {
+  .form {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.assetLabel {
+  display: flex;
+  justify-content: space-between;
+}
+
+.amount {
+  grid-column: 1/-1;
+}
+
+.amountLabel {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.split {
+  display: flex;
+  justify-content: space-between;
+}
+
+.link {
+  cursor: pointer;
+  border: 0;
+  background: transparent;
+  margin: 0;
+  padding: 2px 0;
+}
+
+.link p {
+  color: #008c73 !important;
+  text-decoration: underline;
+}
+
+.button {
+  width: 100%;
+  grid-column: 1/-1;
+}
