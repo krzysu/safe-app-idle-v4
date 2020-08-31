@@ -62,7 +62,7 @@ const testTokenUsdt: TokenData = {
 describe("utils", () => {
   test("getIdleTokenId", () => {
     expect(utils.getIdleTokenId(testToken.strategyId, testToken.tokenId)).toBe(
-      "BestYield_0"
+      "BestYield_dai"
     );
   });
 

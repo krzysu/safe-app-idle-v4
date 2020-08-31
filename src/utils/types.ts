@@ -17,12 +17,12 @@ export enum Form {
 }
 
 export enum Token {
-  DAI,
-  USDC,
-  USDT,
-  SUSD,
-  TUSD,
-  WBTC,
+  DAI = "dai",
+  USDC = "usdc",
+  USDT = "usdt",
+  SUSD = "susd",
+  TUSD = "tusd",
+  WBTC = "wbtc",
 }
 
 export interface TokenBasicData {

@@ -28,7 +28,7 @@ const buildRiskDai = buildRisk(Token.DAI, logoMap[Token.DAI]);
 const buildRiskUsdc = buildRisk(Token.USDC, logoMap[Token.USDC]);
 const buildRiskUsdt = buildRisk(Token.USDT, logoMap[Token.USDT]);
 
-const mainnet = [
+const mainnet: TokenBasicData[] = [
   buildBestDai(idleMainnet.maxYield.dai.address),
   buildBestUsdc(idleMainnet.maxYield.usdc.address),
   buildBestUsdt(idleMainnet.maxYield.usdt.address),
@@ -41,7 +41,7 @@ const mainnet = [
 ];
 
 // I deployed a few Idle mocked contracts on rinkeby
-const rinkeby = [
+const rinkeby: TokenBasicData[] = [
   buildBestDai("0xb20567b77AF55Cd4462941Eb9c9F2bFd734dF84f"),
   buildBestUsdc("0x7C5E9E8f8Cedba477Efd1eA461aB2e54684C9897"),
   // buildBestUsdt("0x728d6b9940F74B23CAa86a6afA7ea05Cc9d8A51F"),

@@ -2,7 +2,6 @@ import { ethers, BigNumberish } from "ethers";
 import BigNumber from "bignumber.js";
 import { formatAmount } from "./formatAmount";
 import { Form, Strategy, Token, TokenData } from "./types";
-import { eth } from "@studydefi/money-legos/erc20";
 
 interface Balance {
   balance: BigNumberish;
