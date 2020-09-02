@@ -67,9 +67,51 @@ export interface StrategySelectItem {
 }
 
 export interface State {
+  isLoaded: boolean;
   tokens: Record<string, TokenData>;
+  currentPage: Page;
+  currentTokenId?: Token;
+  currentStrategyId?: Strategy;
   tokenSelectItems: TokenSelectItem[];
   strategySelectItems: StrategySelectItem[];
-  currentTokenId: Token;
-  currentStrategyId: Strategy;
+}
+
+export enum Actions {
+  SetTokens,
+  GoToPage,
+  UpdateTokenPrice,
+}
+
+export type UpdateTokenPricePayload = {
+  strategyId: Strategy;
+  tokenId: Token;
+  price: ethers.BigNumber;
+};
+
+export type Action =
+  | {
+      type: Actions.SetTokens;
+      payload: Record<string, TokenData>;
+    }
+  | {
+      type: Actions.GoToPage;
+      payload: {
+        page: Page;
+        tokenId?: Token;
+        strategyId?: Strategy;
+      };
+    }
+  | {
+      type: Actions.UpdateTokenPrice;
+      payload: UpdateTokenPricePayload;
+    };
+
+export interface Dispatch {
+  setTokens(tokens: Record<string, TokenData>): void;
+  goToPage(page: Page, tokenId?: Token, strategyId?: Strategy): void;
+  updateTokenPrice(
+    strategyId: Strategy,
+    tokenId: Token,
+    price: ethers.BigNumber
+  ): void;
 }

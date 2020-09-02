@@ -54,9 +54,11 @@ const Form: React.FC<Props> = ({
 }) => {
   const { tokens, tokenSelectItems, strategySelectItems } = state;
 
-  const [tokenId, setTokenId] = useState<Token>(state.currentTokenId);
+  const [tokenId, setTokenId] = useState<Token>(
+    state.currentTokenId || Token.DAI
+  );
   const [strategyId, setStrategyId] = useState<Strategy>(
-    state.currentStrategyId
+    state.currentStrategyId || Strategy.BestYield
   );
   const [amountBN, setAmountBN] = useState(BNify(0)); // user friendly amount always in underlying token
   const [isValid, setIsValid] = useState(false);
