@@ -1,10 +1,7 @@
 import { ethers } from "ethers";
-import { Networks } from "@gnosis.pm/safe-apps-sdk";
 import tokens from "./tokens";
 import { getIdleTokenId } from "./amounts";
-import { TokenData, TokenBasicData } from "../types";
-
-type Network = Extract<Networks, "mainnet" | "rinkeby">;
+import { TokenData, TokenBasicData, Network } from "../types";
 
 const getProvider = (network: Network = "rinkeby") => {
   const provider = new ethers.providers.JsonRpcProvider(
@@ -26,9 +23,9 @@ const initToken = async (
 
   let isPaused = false;
   // rinkeby mocked contracts don't have paused function
-  try {
-    isPaused = await idleContract.paused();
-  } catch (e) {}
+  // try {
+  //   isPaused = await idleContract.paused();
+  // } catch (e) {}
 
   const idleBalance = await idleContract.balanceOf(safeAddress);
   const avgAPR = await idleContract.getAvgAPR();
@@ -49,7 +46,7 @@ const initToken = async (
     tokenPrice,
     avgAPR,
     underlying: {
-      // contract: underContract,
+      // contract: underContract, // TODO store contract instances separately
       balance: underBalance,
       decimals: underDecimals,
     },
