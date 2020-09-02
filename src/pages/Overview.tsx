@@ -1,7 +1,8 @@
 import React, { useMemo } from "react";
 import { Text } from "@gnosis.pm/safe-react-components";
+import { useAppState } from "../providers/AppProvider";
 import Table from "../components/Table";
-import { State, Strategy, TokenData } from "../utils/types";
+import { Strategy, TokenData } from "../utils/types";
 
 import maxYieldSrc from "../assets/best-on.svg";
 import riskAdjustedSrc from "../assets/risk-on.svg";
@@ -12,19 +13,9 @@ const findAllByStrategy = (tokenArray: TokenData[], strategyId: Strategy) => {
   return tokenArray.filter((token) => token.strategyId === strategyId);
 };
 
-// TODO fix types
-type Props = {
-  state: State;
-  onDepositClick: any;
-  onWithdrawClick: any;
-};
+const Overview: React.FC = () => {
+  const { tokens } = useAppState();
 
-const Overview: React.FC<Props> = ({
-  state,
-  onDepositClick,
-  onWithdrawClick,
-}) => {
-  const { tokens } = state;
   const tokenArray = useMemo(
     () => Object.keys(tokens).map((key) => tokens[key]),
     [tokens]
@@ -60,8 +51,6 @@ const Overview: React.FC<Props> = ({
             iconSrc={maxYieldSrc}
             title="Best-Yield - Maximize your returns"
             tokens={maxYieldTokens}
-            onDepositClick={onDepositClick}
-            onWithdrawClick={onWithdrawClick}
           />
         </div>
       )}
@@ -71,8 +60,6 @@ const Overview: React.FC<Props> = ({
             iconSrc={riskAdjustedSrc}
             title="Risk-Adjusted - Optimize your risk exposure"
             tokens={riskAdjustedTokens}
-            onDepositClick={onDepositClick}
-            onWithdrawClick={onWithdrawClick}
           />
         </div>
       )}

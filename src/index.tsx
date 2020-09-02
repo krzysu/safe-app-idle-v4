@@ -5,6 +5,7 @@ import { theme } from "@gnosis.pm/safe-react-components";
 
 import GlobalStyle from "./components/GlobalStyle";
 import SafeAppProvider from "./providers/SafeAppProvider";
+import AppProvider from "./providers/AppProvider";
 import App from "./App";
 
 ReactDOM.render(
@@ -12,7 +13,9 @@ ReactDOM.render(
     <ThemeProvider theme={theme}>
       <GlobalStyle />
       <SafeAppProvider>
-        <App />
+        <AppProvider>
+          <App />
+        </AppProvider>
       </SafeAppProvider>
     </ThemeProvider>
   </React.StrictMode>,

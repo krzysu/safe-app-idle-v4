@@ -51,7 +51,7 @@ export const calculateRealAmountWei = (
   formType: Form,
   formToken: TokenData,
   amountBN: BigNumber
-) => {
+): ethers.BigNumber => {
   if (formType === Form.Deposit) {
     return parseUnits(
       amountBN.toFixed(formToken.underlying.decimals),

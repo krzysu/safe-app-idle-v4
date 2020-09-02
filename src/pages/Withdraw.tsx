@@ -1,37 +1,38 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { Title } from "@gnosis.pm/safe-react-components";
+import { Form as FormType, TxData, Page } from "../utils/types";
 import { useSafeApp } from "../providers/SafeAppProvider";
-import Form from "../components/Form";
+import { useAppState, useAppDispatch } from "../providers/AppProvider";
 import { getIdleTokenId } from "../utils/amounts";
-import { Form as FormType, TxData } from "../utils/types";
+import Form from "../components/Form";
 
-// TODO fix types
-type Props = {
-  state: any;
-  onBackClick: any;
-  updateTokenPrice: any;
-};
-
-const Withdraw: React.FC<Props> = ({
-  state,
-  onBackClick,
-  updateTokenPrice,
-}) => {
+const Withdraw: React.FC = () => {
   const { appsSdk } = useSafeApp();
+  const { tokens } = useAppState();
+  const { goToPage } = useAppDispatch();
+
+  const goToOverview = useCallback(() => goToPage(Page.Overview), [goToPage]);
 
   const handleWithdraw = ({ tokenId, strategyId, amountWei }: TxData) => {
-    const { idle } = state.tokens[getIdleTokenId(strategyId, tokenId)];
+    const { idle } = tokens[getIdleTokenId(strategyId, tokenId)];
+
+    console.log(idle);
 
     const txs = [
       {
-        to: idle.contract.address,
+        to: "",
         value: "0",
-        data: idle.contract.interface.functions.redeemIdleToken.encode([
-          amountWei,
-          true,
-          [],
-        ]),
+        data: "",
       },
+      // {
+      //   to: idle.contract.address,
+      //   value: "0",
+      //   data: idle.contract.interface.functions.redeemIdleToken.encode([
+      //     amountWei,
+      //     true,
+      //     [],
+      //   ]),
+      // },
     ];
 
     appsSdk?.sendTransactions(txs);
@@ -42,10 +43,8 @@ const Withdraw: React.FC<Props> = ({
       <Title size="xs">Withdraw</Title>
 
       <Form
-        state={state}
         onSubmit={handleWithdraw}
-        onBackClick={onBackClick}
-        updateTokenPrice={updateTokenPrice}
+        onBackClick={goToOverview}
         formType={FormType.Withdraw}
       />
     </React.Fragment>

@@ -1,28 +1,32 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { Button, Text } from "@gnosis.pm/safe-react-components";
+import { useAppDispatch } from "../providers/AppProvider";
 import { formatToken, formatAPR, formatDepositBalance } from "../utils/amounts";
-import { Balance, TokenData } from "../utils/types";
+import { Balance, TokenData, Page } from "../utils/types";
 
 import styles from "./Table.module.css";
 
 const hasZeroBalance = (token: Balance) => token.balance.eq(0);
 
-// TODO fix types
 type Props = {
   iconSrc: string;
   title: string;
   tokens: TokenData[];
-  onDepositClick: any;
-  onWithdrawClick: any;
 };
 
-const Table: React.FC<Props> = ({
-  iconSrc,
-  title,
-  tokens,
-  onDepositClick,
-  onWithdrawClick,
-}) => {
+const Table: React.FC<Props> = ({ iconSrc, title, tokens }) => {
+  const { goToPage } = useAppDispatch();
+
+  const goToDeposit = useCallback(
+    (tokenId, strategyId) => () => goToPage(Page.Deposit, tokenId, strategyId),
+    [goToPage]
+  );
+
+  const goToWithdraw = useCallback(
+    (tokenId, strategyId) => () => goToPage(Page.Withdraw, tokenId, strategyId),
+    [goToPage]
+  );
+
   return (
     <React.Fragment>
       <div className={styles.header}>
@@ -77,7 +81,7 @@ const Table: React.FC<Props> = ({
                       disabled={
                         hasZeroBalance(token.underlying) || token.isPaused
                       }
-                      onClick={onDepositClick(token.tokenId, token.strategyId)}
+                      onClick={goToDeposit(token.tokenId, token.strategyId)}
                     >
                       Deposit
                     </Button>
@@ -88,7 +92,7 @@ const Table: React.FC<Props> = ({
                       color="secondary"
                       variant="contained"
                       disabled={hasZeroBalance(token.idle)}
-                      onClick={onWithdrawClick(token.tokenId, token.strategyId)}
+                      onClick={goToWithdraw(token.tokenId, token.strategyId)}
                     >
                       Withdraw
                     </Button>

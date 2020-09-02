@@ -1,41 +1,45 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { Title } from "@gnosis.pm/safe-react-components";
+import { Form as FormType, TxData, Page } from "../utils/types";
 import { useSafeApp } from "../providers/SafeAppProvider";
-import Form from "../components/Form";
+import { useAppState, useAppDispatch } from "../providers/AppProvider";
 import { getIdleTokenId } from "../utils/amounts";
-import { Form as FormType, TxData } from "../utils/types";
+import Form from "../components/Form";
 
-// TODO fix types
-type Props = {
-  state: any;
-  onBackClick: any;
-};
-
-const Deposit: React.FC<Props> = ({ state, onBackClick }) => {
+const Deposit: React.FC = () => {
   const { appsSdk } = useSafeApp();
+  const { tokens } = useAppState();
+  const { goToPage } = useAppDispatch();
+
+  const goToOverview = useCallback(() => goToPage(Page.Overview), [goToPage]);
 
   const handleDeposit = ({ tokenId, strategyId, amountWei }: TxData) => {
-    const { underlying, idle } = state.tokens[
-      getIdleTokenId(strategyId, tokenId)
-    ];
+    const { underlying, idle } = tokens[getIdleTokenId(strategyId, tokenId)];
+
+    console.log(underlying, idle);
 
     const txs = [
       {
-        to: underlying.contract.address,
+        to: "",
         value: "0",
-        data: underlying.contract.interface.functions.approve.encode([
-          idle.contract.address,
-          amountWei,
-        ]),
+        data: "",
       },
-      {
-        to: idle.contract.address,
-        value: "0",
-        data: idle.contract.interface.functions.mintIdleToken.encode([
-          amountWei,
-          true,
-        ]),
-      },
+      // {
+      //   to: underlying.contract.address,
+      //   value: "0",
+      //   data: underlying.contract.interface.functions.approve.encode([
+      //     idle.contract.address,
+      //     amountWei,
+      //   ]),
+      // },
+      // {
+      //   to: idle.contract.address,
+      //   value: "0",
+      //   data: idle.contract.interface.functions.mintIdleToken.encode([
+      //     amountWei,
+      //     true,
+      //   ]),
+      // },
     ];
 
     appsSdk?.sendTransactions(txs);
@@ -45,9 +49,8 @@ const Deposit: React.FC<Props> = ({ state, onBackClick }) => {
     <React.Fragment>
       <Title size="xs">Deposit</Title>
       <Form
-        state={state}
         onSubmit={handleDeposit}
-        onBackClick={onBackClick}
+        onBackClick={goToOverview}
         formType={FormType.Deposit}
       />
     </React.Fragment>

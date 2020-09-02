@@ -49,7 +49,7 @@ export interface TokenData extends TokenBasicData {
 export interface TxData {
   tokenId: Token;
   strategyId: Strategy;
-  amountWei: string;
+  amountWei: ethers.BigNumber;
 }
 
 export interface TokenSelectItem {
@@ -105,13 +105,3 @@ export type Action =
       type: Actions.UpdateTokenPrice;
       payload: UpdateTokenPricePayload;
     };
-
-export interface Dispatch {
-  setTokens(tokens: Record<string, TokenData>): void;
-  goToPage(page: Page, tokenId?: Token, strategyId?: Strategy): void;
-  updateTokenPrice(
-    strategyId: Strategy,
-    tokenId: Token,
-    price: ethers.BigNumber
-  ): void;
-}

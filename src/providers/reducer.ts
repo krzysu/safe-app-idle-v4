@@ -1,12 +1,9 @@
-import { ethers } from "ethers";
 import { getIdleTokenId } from "../utils/amounts";
 import {
   Action,
   Actions,
   Page,
   State,
-  Strategy,
-  Token,
   TokenData,
   UpdateTokenPricePayload,
 } from "../utils/types";
@@ -23,27 +20,6 @@ export const initialState: State = {
   currentStrategyId: undefined,
   tokenSelectItems: [],
   strategySelectItems: [],
-};
-
-export const actions = {
-  setTokens: (tokens: Record<string, TokenData>) => ({
-    type: Actions.SetTokens,
-    payload: tokens,
-  }),
-
-  goToPage: (page: Page, tokenId?: Token, strategyId?: Strategy) => ({
-    type: Actions.GoToPage,
-    payload: { page, tokenId, strategyId },
-  }),
-
-  updateTokenPrice: (
-    strategyId: Strategy,
-    tokenId: Token,
-    price: ethers.BigNumber
-  ) => ({
-    type: Actions.UpdateTokenPrice,
-    payload: { strategyId, tokenId, price },
-  }),
 };
 
 // reducer helpers

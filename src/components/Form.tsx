@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button, Text, TextField } from "@gnosis.pm/safe-react-components";
-import TokenSelect from "./TokenSelect";
-import StrategySelect from "./StrategySelect";
+import { useAppState, useAppDispatch } from "../providers/AppProvider";
 import {
   BNify,
   calculateMaxAmountBN,
@@ -16,8 +15,10 @@ import {
   TokenData,
   Token,
   Strategy,
-  State,
+  TxData,
 } from "../utils/types";
+import TokenSelect from "./TokenSelect";
+import StrategySelect from "./StrategySelect";
 
 import styles from "./Form.module.css";
 
@@ -38,27 +39,24 @@ const getFormTokenBalance = (formToken: TokenData, formType: FormType) => {
 
 // TODO fix types
 type Props = {
-  state: State;
-  onSubmit: any;
+  onSubmit: (obj: TxData) => void;
   onBackClick: any;
-  updateTokenPrice?: any;
   formType: FormType;
 };
 
-const Form: React.FC<Props> = ({
-  state,
-  onSubmit,
-  onBackClick,
-  updateTokenPrice,
-  formType,
-}) => {
-  const { tokens, tokenSelectItems, strategySelectItems } = state;
+const Form: React.FC<Props> = ({ onSubmit, onBackClick, formType }) => {
+  const {
+    tokens,
+    tokenSelectItems,
+    strategySelectItems,
+    currentTokenId,
+    currentStrategyId,
+  } = useAppState();
+  const { updateTokenPrice } = useAppDispatch();
 
-  const [tokenId, setTokenId] = useState<Token>(
-    state.currentTokenId || Token.DAI
-  );
+  const [tokenId, setTokenId] = useState<Token>(currentTokenId || Token.DAI);
   const [strategyId, setStrategyId] = useState<Strategy>(
-    state.currentStrategyId || Strategy.BestYield
+    currentStrategyId || Strategy.BestYield
   );
   const [amountBN, setAmountBN] = useState(BNify(0)); // user friendly amount always in underlying token
   const [isValid, setIsValid] = useState(false);
@@ -83,10 +81,10 @@ const Form: React.FC<Props> = ({
 
   // update price on withdraw form to show actual deposit balance
   useEffect(() => {
-    if (updateTokenPrice && typeof updateTokenPrice === "function") {
+    if (formType === FormType.Withdraw) {
       updateTokenPrice(strategyId, tokenId);
     }
-  }, [strategyId, tokenId]); // cannot add updateTokenPrice as it changes every time the price updates causing infinite rerender loop
+  }, [updateTokenPrice, formType, strategyId, tokenId]);
 
   // simple form validation
   useEffect(() => {
