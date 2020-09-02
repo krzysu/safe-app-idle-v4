@@ -2,7 +2,7 @@ import { ethers } from "ethers";
 import { Networks } from "@gnosis.pm/safe-apps-sdk";
 import tokens from "./tokens";
 import { getIdleTokenId } from "./amounts";
-import { TokenData, TokenBasicData } from "./types";
+import { TokenData, TokenBasicData } from "../types";
 
 type Network = Extract<Networks, "mainnet" | "rinkeby">;
 

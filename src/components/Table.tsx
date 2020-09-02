@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import { Button, Text } from "@gnosis.pm/safe-react-components";
 import { useAppDispatch } from "../providers/AppProvider";
 import { formatToken, formatAPR, formatDepositBalance } from "../utils/amounts";
-import { Balance, TokenData, Page } from "../utils/types";
+import { Balance, TokenData, Page } from "../types";
 
 import styles from "./Table.module.css";
 

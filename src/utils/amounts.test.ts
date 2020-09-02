@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import * as utils from "./amounts";
-import { Form, Strategy, Token, TokenData } from "./types";
+import { Form, Strategy, Token, TokenData } from "../types";
 
 const common = {
   address: "",

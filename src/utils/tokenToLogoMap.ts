@@ -5,7 +5,7 @@ import susdSrc from "../assets/susd.svg";
 import tusdSrc from "../assets/tusd.svg";
 import wbtcSrc from "../assets/wbtc.svg";
 
-import { Token } from "./types";
+import { Token } from "../types";
 
 const tokenToLogoMap = {
   [Token.DAI]: daiSrc,

@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { Text } from "@gnosis.pm/safe-react-components";
 import { useAppState } from "../providers/AppProvider";
 import Table from "../components/Table";
-import { Strategy, TokenData } from "../utils/types";
+import { Strategy, TokenData } from "../types";
 
 import maxYieldSrc from "../assets/best-on.svg";
 import riskAdjustedSrc from "../assets/risk-on.svg";

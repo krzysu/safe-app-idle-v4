@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import BigNumber from "bignumber.js";
 import { formatAmount } from "./formatAmount";
-import { Balance, Form, Strategy, Token, TokenData } from "./types";
+import { Balance, Form, Strategy, Token, TokenData } from "../types";
 
 const balanceToBN = ({ balance, decimals }: Balance): BigNumber => {
   const balanceString = ethers.utils.formatUnits(balance, decimals);

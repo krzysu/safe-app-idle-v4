@@ -5,7 +5,7 @@ import {
   TokenBasicData,
   TokenSelectItem,
   StrategySelectItem,
-} from "./types";
+} from "../types";
 
 import maxYieldSrc from "../assets/best-on.svg";
 import riskAdjustedSrc from "../assets/risk-on.svg";

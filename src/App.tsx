@@ -1,7 +1,7 @@
 import React from "react";
 import { Loader, Text } from "@gnosis.pm/safe-react-components";
 import { useAppState } from "./providers/AppProvider";
-import { Page } from "./utils/types";
+import { Page } from "./types";
 import Header from "./components/Header";
 import Overview from "./pages/Overview";
 import Withdraw from "./pages/Withdraw";

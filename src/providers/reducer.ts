@@ -1,16 +1,10 @@
 import { getIdleTokenId } from "../utils/amounts";
 import {
-  Action,
-  Actions,
-  Page,
-  State,
-  TokenData,
-  UpdateTokenPricePayload,
-} from "../utils/types";
-import {
   buildTokenSelectItems,
   buildStrategySelectItems,
 } from "../utils/buildSelectItems";
+import { Page, TokenData } from "../types";
+import { Action, Actions, State, UpdateTokenPricePayload } from "./types";
 
 export const initialState: State = {
   isLoaded: false,

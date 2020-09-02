@@ -10,13 +10,7 @@ import {
   formatAPR,
   formatDepositBalance,
 } from "../utils/amounts";
-import {
-  Form as FormType,
-  TokenData,
-  Token,
-  Strategy,
-  TxData,
-} from "../utils/types";
+import { Form as FormType, TokenData, Token, Strategy, TxData } from "../types";
 import TokenSelect from "./TokenSelect";
 import StrategySelect from "./StrategySelect";
 
@@ -37,10 +31,9 @@ const getFormTokenBalance = (formToken: TokenData, formType: FormType) => {
   }
 };
 
-// TODO fix types
 type Props = {
   onSubmit: (obj: TxData) => void;
-  onBackClick: any;
+  onBackClick: () => void;
   formType: FormType;
 };
 

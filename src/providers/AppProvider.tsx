@@ -5,16 +5,10 @@ import React, {
   useMemo,
   useReducer,
 } from "react";
-import {
-  Actions,
-  State,
-  TokenData,
-  Page,
-  Token,
-  Strategy,
-} from "../utils/types";
-import { initialState, reducer } from "./reducer";
 import { ethers } from "ethers";
+import { TokenData, Page, Token, Strategy } from "../types";
+import { State, Actions } from "./types";
+import { initialState, reducer } from "./reducer";
 
 const stateCtx = createContext<State>(initialState);
 const dispatchCtx = createContext<Dispatch>({} as Dispatch);

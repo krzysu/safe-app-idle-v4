@@ -4,7 +4,7 @@ import {
 } from "./buildSelectItems";
 import tokens from "./tokens";
 import { getIdleTokenId } from "./amounts";
-import { Strategy, Token, TokenBasicData } from "./types";
+import { Strategy, Token, TokenBasicData } from "../types";
 
 const testTokens = tokens["mainnet"].reduce((acc, item) => {
   acc[getIdleTokenId(item.strategyId, item.tokenId)] = item;

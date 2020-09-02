@@ -2,7 +2,7 @@ import erc20Mainnet from "@studydefi/money-legos/erc20";
 import idleMainnet from "@studydefi/money-legos/idle";
 
 import logoMap from "./tokenToLogoMap";
-import { Strategy, Token, TokenBasicData } from "./types";
+import { Strategy, Token, TokenBasicData } from "../types";
 
 const buildTokenData = (strategyId: Strategy) => (
   tokenId: Token,
