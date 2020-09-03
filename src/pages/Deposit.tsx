@@ -13,32 +13,35 @@ const Deposit: React.FC = () => {
 
   const goToOverview = useCallback(() => goToPage(Page.Overview), [goToPage]);
 
-  const handleDeposit = ({ tokenId, strategyId, amountWei }: TxData) => {
-    const { underlyingContract, idleContract } = contracts[
-      getIdleTokenId(strategyId, tokenId)
-    ];
+  const handleDeposit = useCallback(
+    ({ tokenId, strategyId, amountWei }: TxData) => {
+      const { underlyingContract, idleContract } = contracts[
+        getIdleTokenId(strategyId, tokenId)
+      ];
 
-    const txs = [
-      {
-        to: underlyingContract.address,
-        value: "0",
-        data: underlyingContract.interface.encodeFunctionData("approve", [
-          idleContract.address,
-          amountWei,
-        ]),
-      },
-      {
-        to: idleContract.address,
-        value: "0",
-        data: idleContract.interface.encodeFunctionData(
-          "mintIdleToken(uint256,bool)",
-          [amountWei, true]
-        ),
-      },
-    ];
+      const txs = [
+        {
+          to: underlyingContract.address,
+          value: "0",
+          data: underlyingContract.interface.encodeFunctionData("approve", [
+            idleContract.address,
+            amountWei,
+          ]),
+        },
+        {
+          to: idleContract.address,
+          value: "0",
+          data: idleContract.interface.encodeFunctionData(
+            "mintIdleToken(uint256,bool)",
+            [amountWei, true]
+          ),
+        },
+      ];
 
-    appsSdk?.sendTransactions(txs);
-  };
+      appsSdk?.sendTransactions(txs);
+    },
+    [appsSdk, contracts]
+  );
 
   return (
     <React.Fragment>

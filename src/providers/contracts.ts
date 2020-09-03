@@ -1,6 +1,8 @@
 import { ethers } from "ethers";
-import tokens from "./tokens";
 import { getIdleTokenId } from "../utils/amounts";
+import { erc20Abi, idleV3Abi, idleV4Abi } from "./abis";
+import tokensV3 from "./tokensV3";
+import tokensV4 from "./tokensV4";
 import {
   Contracts,
   TokenData,
@@ -20,17 +22,13 @@ const initContract = async (
   provider: ethers.providers.JsonRpcProvider,
   token: TokenBasicData
 ): Promise<Contracts> => {
-  const idleContract = new ethers.Contract(
-    token.address,
-    tokens.idleAbi,
-    provider
-  );
+  const idleContract = new ethers.Contract(token.address, idleV4Abi, provider);
 
   const underlyingAddress = await idleContract.token();
 
   const underlyingContract = new ethers.Contract(
     underlyingAddress,
-    tokens.erc20Abi,
+    erc20Abi,
     provider
   );
 
@@ -39,6 +37,20 @@ const initContract = async (
     strategyId: token.strategyId,
     idleContract,
     underlyingContract,
+  };
+};
+
+const initLegacyContract = async (
+  provider: ethers.providers.JsonRpcProvider,
+  token: TokenBasicData
+): Promise<Contracts> => {
+  const idleContract = new ethers.Contract(token.address, idleV3Abi, provider);
+
+  return {
+    tokenId: token.tokenId,
+    strategyId: token.strategyId,
+    idleContract,
+    underlyingContract: idleContract, // ignore
   };
 };
 
@@ -76,20 +88,49 @@ const initToken = async (
   };
 };
 
+const initLegacyToken = async (
+  { idleContract }: Contracts,
+  safeAddress: string,
+  token: TokenBasicData
+): Promise<TokenData | null> => {
+  const idleBalance = await idleContract.balanceOf(safeAddress);
+  const tokenPrice = await idleContract.tokenPrice();
+
+  if (idleBalance.eq("0")) {
+    return null;
+  }
+
+  // skip unnecessary data
+  return {
+    ...token,
+    isPaused: false,
+    tokenPrice,
+    avgAPR: ethers.BigNumber.from("0"),
+    underlying: {
+      balance: ethers.BigNumber.from("0"),
+      decimals: 18,
+    },
+    idle: {
+      balance: idleBalance,
+      decimals: token.decimals,
+    },
+  };
+};
+
 const arrayToRecord = <T extends Identifier>(items: T[]): Record<string, T> =>
   items.reduce((acc, item: T) => {
     acc[getIdleTokenId(item.strategyId, item.tokenId)] = item;
     return acc;
   }, {} as Record<string, T>);
 
-export const initAllContracts = async (
+export const initContracts = async (
   network: Network
 ): Promise<Record<string, Contracts>> => {
   const provider = getProvider(network);
-  const networkTokens = tokens[network] as TokenBasicData[];
+  const tokens = tokensV4[network];
 
   const result = await Promise.all(
-    networkTokens.map(async (token) => {
+    tokens.map(async (token) => {
       return await initContract(provider, token);
     })
   );
@@ -97,19 +138,55 @@ export const initAllContracts = async (
   return arrayToRecord(result);
 };
 
-export const initAllTokens = async (
+export const initLegacyContracts = async (
+  network: Network
+): Promise<Record<string, Contracts>> => {
+  const provider = getProvider(network);
+  const tokens = tokensV3[network];
+
+  const result = await Promise.all(
+    tokens.map(async (token) => {
+      return await initLegacyContract(provider, token);
+    })
+  );
+
+  return arrayToRecord(result);
+};
+
+export const initTokens = async (
   contracts: Record<string, Contracts>,
   network: Network,
   safeAddress: string
 ): Promise<Record<string, TokenData>> => {
-  const networkTokens = tokens[network] as TokenBasicData[];
+  const tokens = tokensV4[network];
 
   const result = await Promise.all(
-    networkTokens.map(async (token) => {
+    tokens.map(async (token) => {
       const id = getIdleTokenId(token.strategyId, token.tokenId);
       return await initToken(contracts[id], safeAddress, token);
     })
   );
 
   return arrayToRecord(result);
+};
+
+export const initLegacyTokens = async (
+  contracts: Record<string, Contracts>,
+  network: Network,
+  safeAddress: string
+): Promise<Record<string, TokenData>> => {
+  const tokens = tokensV3[network];
+
+  const allTokens = await Promise.all(
+    tokens.map(async (token) => {
+      const id = getIdleTokenId(token.strategyId, token.tokenId);
+      return await initLegacyToken(contracts[id], safeAddress, token);
+    })
+  );
+
+  const tokensWithBalance = allTokens.filter(
+    (item: TokenData | null) => !!item
+  );
+
+  return arrayToRecord(tokensWithBalance as TokenData[]);
 };

@@ -2,9 +2,10 @@ import React, { useMemo } from "react";
 import { Text } from "@gnosis.pm/safe-react-components";
 import { useAppState } from "../providers/AppProvider";
 import Table from "../components/Table";
+import MigrationTable from "../components/MigrationTable";
 import { Strategy, TokenData } from "../types";
 
-import maxYieldSrc from "../assets/best-on.svg";
+import bestYieldSrc from "../assets/best-on.svg";
 import riskAdjustedSrc from "../assets/risk-on.svg";
 
 import styles from "./Overview.module.css";
@@ -14,13 +15,18 @@ const findAllByStrategy = (tokenArray: TokenData[], strategyId: Strategy) => {
 };
 
 const Overview: React.FC = () => {
-  const { tokens } = useAppState();
+  const { tokens, legacyTokens } = useAppState();
 
   const tokenArray = useMemo(
     () => Object.keys(tokens).map((key) => tokens[key]),
     [tokens]
   );
-  const maxYieldTokens = useMemo(
+  const legacyTokenArray = useMemo(
+    () => Object.keys(legacyTokens).map((key) => legacyTokens[key]),
+    [legacyTokens]
+  );
+
+  const bestYieldTokens = useMemo(
     () => findAllByStrategy(tokenArray, Strategy.BestYield),
     [tokenArray]
   );
@@ -45,12 +51,17 @@ const Overview: React.FC = () => {
           </a>
         </Text>
       </div>
-      {maxYieldTokens.length > 0 && (
+      {legacyTokenArray.length > 0 && (
+        <div className={styles.table}>
+          <MigrationTable tokens={legacyTokenArray} />
+        </div>
+      )}
+      {bestYieldTokens.length > 0 && (
         <div className={styles.table}>
           <Table
-            iconSrc={maxYieldSrc}
+            iconSrc={bestYieldSrc}
             title="Best-Yield - Maximize your returns"
-            tokens={maxYieldTokens}
+            tokens={bestYieldTokens}
           />
         </div>
       )}

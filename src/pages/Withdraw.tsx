@@ -13,23 +13,26 @@ const Withdraw: React.FC = () => {
 
   const goToOverview = useCallback(() => goToPage(Page.Overview), [goToPage]);
 
-  const handleWithdraw = ({ tokenId, strategyId, amountWei }: TxData) => {
-    const { idleContract } = contracts[getIdleTokenId(strategyId, tokenId)];
+  const handleWithdraw = useCallback(
+    ({ tokenId, strategyId, amountWei }: TxData) => {
+      const { idleContract } = contracts[getIdleTokenId(strategyId, tokenId)];
 
-    const txs = [
-      {
-        to: idleContract.address,
-        value: "0",
-        data: idleContract.interface.encodeFunctionData("redeemIdleToken", [
-          amountWei,
-          true,
-          [],
-        ]),
-      },
-    ];
+      const txs = [
+        {
+          to: idleContract.address,
+          value: "0",
+          data: idleContract.interface.encodeFunctionData("redeemIdleToken", [
+            amountWei,
+            true,
+            [],
+          ]),
+        },
+      ];
 
-    appsSdk?.sendTransactions(txs);
-  };
+      appsSdk?.sendTransactions(txs);
+    },
+    [appsSdk, contracts]
+  );
 
   return (
     <React.Fragment>

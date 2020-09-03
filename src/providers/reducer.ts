@@ -15,6 +15,8 @@ export const initialState: State = {
   currentStrategyId: undefined,
   tokenSelectItems: [],
   strategySelectItems: [],
+  legacyTokens: {},
+  legacyContracts: {},
 };
 
 // reducer helpers
@@ -38,7 +40,7 @@ export const reducer = (state: State, action: Action): State => {
     case Actions.SetContracts:
       return {
         ...state,
-        contracts: action.payload,
+        ...action.payload,
       };
 
     case Actions.SetTokens:
@@ -48,6 +50,12 @@ export const reducer = (state: State, action: Action): State => {
         tokenSelectItems: buildTokenSelectItems(action.payload),
         strategySelectItems: buildStrategySelectItems(action.payload),
         isLoaded: true,
+      };
+
+    case Actions.SetLegacyTokens:
+      return {
+        ...state,
+        legacyTokens: action.payload,
       };
 
     case Actions.GoToPage:

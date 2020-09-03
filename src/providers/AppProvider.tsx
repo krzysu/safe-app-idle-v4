@@ -9,7 +9,12 @@ import React, {
 import { getIdleTokenId } from "../utils/amounts";
 import { useSafeApp } from "./SafeAppProvider";
 import { initialState, reducer } from "./reducer";
-import { initAllContracts, initAllTokens } from "./contracts";
+import {
+  initContracts,
+  initTokens,
+  initLegacyContracts,
+  initLegacyTokens,
+} from "./contracts";
 import { Page, Token, Strategy, Network } from "../types";
 import { State, Actions } from "./types";
 
@@ -27,26 +32,34 @@ interface Dispatch {
 const AppProvider: React.FC = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { safeInfo } = useSafeApp();
-  const { contracts } = state;
+  const { contracts, legacyContracts } = state;
 
   useEffect(() => {
     if (safeInfo) {
-      const initContracts = async () => {
-        const result = await initAllContracts(safeInfo.network as Network);
+      const run = async () => {
+        const contractsV4 = await initContracts(safeInfo.network as Network);
+        const contractsV3 = await initLegacyContracts(
+          safeInfo.network as Network
+        );
+
         dispatch({
           type: Actions.SetContracts,
-          payload: result,
+          payload: { contracts: contractsV4 },
+        });
+        dispatch({
+          type: Actions.SetContracts,
+          payload: { legacyContracts: contractsV3 },
         });
       };
 
-      initContracts();
+      run();
     }
   }, [safeInfo]);
 
   useEffect(() => {
     if (safeInfo && Object.keys(contracts).length > 0) {
-      const initTokens = async () => {
-        const result = await initAllTokens(
+      const run = async () => {
+        const result = await initTokens(
           contracts,
           safeInfo.network as Network,
           safeInfo.safeAddress
@@ -57,9 +70,27 @@ const AppProvider: React.FC = ({ children }) => {
         });
       };
 
-      initTokens();
+      run();
     }
   }, [safeInfo, contracts]);
+
+  useEffect(() => {
+    if (safeInfo && Object.keys(legacyContracts).length > 0) {
+      const run = async () => {
+        const result = await initLegacyTokens(
+          legacyContracts,
+          safeInfo.network as Network,
+          safeInfo.safeAddress
+        );
+        dispatch({
+          type: Actions.SetLegacyTokens,
+          payload: result,
+        });
+      };
+
+      run();
+    }
+  }, [safeInfo, legacyContracts]);
 
   const goToPage = useCallback<Dispatch["goToPage"]>(
     (page, tokenId?, strategyId?) => {

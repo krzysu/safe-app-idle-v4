@@ -7,7 +7,7 @@ import {
   StrategySelectItem,
 } from "../types";
 
-import maxYieldSrc from "../assets/best-on.svg";
+import bestYieldSrc from "../assets/best-on.svg";
 import riskAdjustedSrc from "../assets/risk-on.svg";
 
 const toArray = (obj: Record<string, TokenBasicData>): TokenBasicData[] =>
@@ -54,18 +54,18 @@ export const buildStrategySelectItems = (
 ): StrategySelectItem[] => {
   const items = [];
   const tokensArray = toArray(tokens);
-  const maxYieldTokens = getTokensByStrategy(tokensArray, Strategy.BestYield);
+  const bestYieldTokens = getTokensByStrategy(tokensArray, Strategy.BestYield);
   const riskAdjustedTokens = getTokensByStrategy(
     tokensArray,
     Strategy.RiskAdjusted
   );
 
-  if (maxYieldTokens.length > 0) {
+  if (bestYieldTokens.length > 0) {
     items.push({
       id: Strategy.BestYield,
       label: "Best-Yield",
-      iconUrl: maxYieldSrc,
-      tokens: maxYieldTokens,
+      iconUrl: bestYieldSrc,
+      tokens: bestYieldTokens,
     });
   }
 
