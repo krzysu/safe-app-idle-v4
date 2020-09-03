@@ -6,8 +6,8 @@ import React, {
   useReducer,
   useEffect,
 } from "react";
-import { ethers } from "ethers";
-import { initAllTokens } from "../utils/contracts";
+import { initAllContracts, initAllTokens } from "../utils/contracts";
+import { getIdleTokenId } from "../utils/amounts";
 import { useSafeApp } from "./SafeAppProvider";
 import { initialState, reducer } from "./reducer";
 import { Page, Token, Strategy, Network } from "../types";
@@ -27,22 +27,39 @@ interface Dispatch {
 const AppProvider: React.FC = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { safeInfo } = useSafeApp();
+  const { contracts } = state;
 
   useEffect(() => {
-    if (safeInfo && safeInfo.safeAddress !== "") {
-      const { network, safeAddress } = safeInfo;
+    if (safeInfo) {
+      const initContracts = async () => {
+        const result = await initAllContracts(safeInfo.network as Network);
+        dispatch({
+          type: Actions.SetContracts,
+          payload: result,
+        });
+      };
 
+      initContracts();
+    }
+  }, [safeInfo]);
+
+  useEffect(() => {
+    if (safeInfo && Object.keys(contracts).length > 0) {
       const initTokens = async () => {
-        const tokens = await initAllTokens(network as Network, safeAddress);
+        const result = await initAllTokens(
+          contracts,
+          safeInfo.network as Network,
+          safeInfo.safeAddress
+        );
         dispatch({
           type: Actions.SetTokens,
-          payload: tokens,
+          payload: result,
         });
       };
 
       initTokens();
     }
-  }, [safeInfo]);
+  }, [safeInfo, contracts]);
 
   const goToPage = useCallback<Dispatch["goToPage"]>(
     (page, tokenId?, strategyId?) => {
@@ -56,17 +73,23 @@ const AppProvider: React.FC = ({ children }) => {
 
   const updateTokenPrice = useCallback<Dispatch["updateTokenPrice"]>(
     (strategyId, tokenId) => {
-      const price = ethers.BigNumber.from("0"); // TODO get real price
+      if (Object.keys(contracts).length > 0) {
+        const run = async () => {
+          const contract = contracts[getIdleTokenId(strategyId, tokenId)];
+          const price = await contract.idleContract.tokenPrice();
 
-      // const token = tokens[getIdleTokenId(strategyId, tokenId)];
-      // const tokenPrice = await token.idle.contract.tokenPrice();
+          console.log("new price", price);
 
-      dispatch({
-        type: Actions.UpdateTokenPrice,
-        payload: { strategyId, tokenId, price },
-      });
+          dispatch({
+            type: Actions.UpdateTokenPrice,
+            payload: { strategyId, tokenId, price },
+          });
+        };
+
+        run();
+      }
     },
-    []
+    [contracts]
   );
 
   return (

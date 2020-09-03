@@ -1,16 +1,18 @@
 import { ethers } from "ethers";
 import {
-  TokenData,
+  Contracts,
   Page,
-  Token,
   Strategy,
-  TokenSelectItem,
   StrategySelectItem,
+  Token,
+  TokenData,
+  TokenSelectItem,
 } from "../types";
 
 export interface State {
   isLoaded: boolean;
   tokens: Record<string, TokenData>;
+  contracts: Record<string, Contracts>;
   currentPage: Page;
   currentTokenId?: Token;
   currentStrategyId?: Strategy;
@@ -19,6 +21,7 @@ export interface State {
 }
 
 export enum Actions {
+  SetContracts,
   SetTokens,
   GoToPage,
   UpdateTokenPrice,
@@ -31,6 +34,10 @@ export type UpdateTokenPricePayload = {
 };
 
 export type Action =
+  | {
+      type: Actions.SetContracts;
+      payload: Record<string, Contracts>;
+    }
   | {
       type: Actions.SetTokens;
       payload: Record<string, TokenData>;

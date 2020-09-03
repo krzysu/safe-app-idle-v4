@@ -73,11 +73,11 @@ const Form: React.FC<Props> = ({ onSubmit, onBackClick, formType }) => {
   }, [formType, tokens, tokenId, strategyId]);
 
   // update price on withdraw form to show actual deposit balance
-  // useEffect(() => {
-  //   if (formType === FormType.Withdraw) {
-  //     updateTokenPrice(strategyId, tokenId);
-  //   }
-  // }, [updateTokenPrice, formType, strategyId, tokenId]);
+  useEffect(() => {
+    if (formType === FormType.Withdraw) {
+      updateTokenPrice(strategyId, tokenId);
+    }
+  }, [updateTokenPrice, formType, strategyId, tokenId]);
 
   // simple form validation
   useEffect(() => {

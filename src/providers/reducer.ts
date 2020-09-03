@@ -9,6 +9,7 @@ import { Action, Actions, State, UpdateTokenPricePayload } from "./types";
 export const initialState: State = {
   isLoaded: false,
   tokens: {},
+  contracts: {},
   currentPage: Page.Overview,
   currentTokenId: undefined,
   currentStrategyId: undefined,
@@ -34,6 +35,12 @@ const updateTokenPrice = (
 
 export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
+    case Actions.SetContracts:
+      return {
+        ...state,
+        contracts: action.payload,
+      };
+
     case Actions.SetTokens:
       return {
         ...state,

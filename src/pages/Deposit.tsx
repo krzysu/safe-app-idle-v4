@@ -8,38 +8,33 @@ import Form from "../components/Form";
 
 const Deposit: React.FC = () => {
   const { appsSdk } = useSafeApp();
-  const { tokens } = useAppState();
+  const { contracts } = useAppState();
   const { goToPage } = useAppDispatch();
 
   const goToOverview = useCallback(() => goToPage(Page.Overview), [goToPage]);
 
   const handleDeposit = ({ tokenId, strategyId, amountWei }: TxData) => {
-    const { underlying, idle } = tokens[getIdleTokenId(strategyId, tokenId)];
-
-    console.log(underlying, idle);
+    const { underlyingContract, idleContract } = contracts[
+      getIdleTokenId(strategyId, tokenId)
+    ];
 
     const txs = [
       {
-        to: "",
+        to: underlyingContract.address,
         value: "0",
-        data: "",
+        data: underlyingContract.interface.encodeFunctionData(
+          underlyingContract.approve,
+          [idleContract.address, amountWei]
+        ),
       },
-      // {
-      //   to: underlying.contract.address,
-      //   value: "0",
-      //   data: underlying.contract.interface.functions.approve.encode([
-      //     idle.contract.address,
-      //     amountWei,
-      //   ]),
-      // },
-      // {
-      //   to: idle.contract.address,
-      //   value: "0",
-      //   data: idle.contract.interface.functions.mintIdleToken.encode([
-      //     amountWei,
-      //     true,
-      //   ]),
-      // },
+      {
+        to: idleContract.address,
+        value: "0",
+        data: idleContract.interface.encodeFunctionData(
+          idleContract.mintIdleToken,
+          [amountWei, true]
+        ),
+      },
     ];
 
     appsSdk?.sendTransactions(txs);
