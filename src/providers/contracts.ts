@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import tokens from "./tokens";
-import { getIdleTokenId } from "./amounts";
+import { getIdleTokenId } from "../utils/amounts";
 import {
   Contracts,
   TokenData,

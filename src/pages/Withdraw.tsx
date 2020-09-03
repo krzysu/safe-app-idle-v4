@@ -8,31 +8,24 @@ import Form from "../components/Form";
 
 const Withdraw: React.FC = () => {
   const { appsSdk } = useSafeApp();
-  const { tokens } = useAppState();
+  const { contracts } = useAppState();
   const { goToPage } = useAppDispatch();
 
   const goToOverview = useCallback(() => goToPage(Page.Overview), [goToPage]);
 
   const handleWithdraw = ({ tokenId, strategyId, amountWei }: TxData) => {
-    const { idle } = tokens[getIdleTokenId(strategyId, tokenId)];
-
-    console.log(idle);
+    const { idleContract } = contracts[getIdleTokenId(strategyId, tokenId)];
 
     const txs = [
       {
-        to: "",
+        to: idleContract.address,
         value: "0",
-        data: "",
+        data: idleContract.interface.encodeFunctionData("redeemIdleToken", [
+          amountWei,
+          true,
+          [],
+        ]),
       },
-      // {
-      //   to: idle.contract.address,
-      //   value: "0",
-      //   data: idle.contract.interface.functions.redeemIdleToken.encode([
-      //     amountWei,
-      //     true,
-      //     [],
-      //   ]),
-      // },
     ];
 
     appsSdk?.sendTransactions(txs);

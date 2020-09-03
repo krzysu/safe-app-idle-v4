@@ -22,16 +22,16 @@ const Deposit: React.FC = () => {
       {
         to: underlyingContract.address,
         value: "0",
-        data: underlyingContract.interface.encodeFunctionData(
-          underlyingContract.approve,
-          [idleContract.address, amountWei]
-        ),
+        data: underlyingContract.interface.encodeFunctionData("approve", [
+          idleContract.address,
+          amountWei,
+        ]),
       },
       {
         to: idleContract.address,
         value: "0",
         data: idleContract.interface.encodeFunctionData(
-          idleContract.mintIdleToken,
+          "mintIdleToken(uint256,bool)",
           [amountWei, true]
         ),
       },

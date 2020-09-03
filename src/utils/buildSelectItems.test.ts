@@ -2,7 +2,7 @@ import {
   buildTokenSelectItems,
   buildStrategySelectItems,
 } from "./buildSelectItems";
-import tokens from "./tokens";
+import tokens from "../providers/tokens";
 import { getIdleTokenId } from "./amounts";
 import { Strategy, Token, TokenBasicData } from "../types";
 

@@ -6,10 +6,10 @@ import React, {
   useReducer,
   useEffect,
 } from "react";
-import { initAllContracts, initAllTokens } from "../utils/contracts";
 import { getIdleTokenId } from "../utils/amounts";
 import { useSafeApp } from "./SafeAppProvider";
 import { initialState, reducer } from "./reducer";
+import { initAllContracts, initAllTokens } from "./contracts";
 import { Page, Token, Strategy, Network } from "../types";
 import { State, Actions } from "./types";
 
@@ -77,8 +77,6 @@ const AppProvider: React.FC = ({ children }) => {
         const run = async () => {
           const contract = contracts[getIdleTokenId(strategyId, tokenId)];
           const price = await contract.idleContract.tokenPrice();
-
-          console.log("new price", price);
 
           dispatch({
             type: Actions.UpdateTokenPrice,
