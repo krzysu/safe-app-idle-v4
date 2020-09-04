@@ -23,8 +23,6 @@ const Withdraw: React.FC = () => {
           value: "0",
           data: idleContract.interface.encodeFunctionData("redeemIdleToken", [
             amountWei,
-            true,
-            [],
           ]),
         },
       ];

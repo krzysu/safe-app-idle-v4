@@ -1,4 +1,5 @@
 import React, { useCallback } from "react";
+import { ethers } from "ethers";
 import { Title } from "@gnosis.pm/safe-react-components";
 import { Form as FormType, TxData, Page } from "../types";
 import { useSafeApp } from "../providers/SafeAppProvider";
@@ -32,8 +33,13 @@ const Deposit: React.FC = () => {
           to: idleContract.address,
           value: "0",
           data: idleContract.interface.encodeFunctionData(
-            "mintIdleToken(uint256,bool)",
-            [amountWei, true]
+            "mintIdleToken(uint256,bool,address)",
+            [
+              amountWei,
+              true,
+              process.env.REACT_APP_REFERRAL_ADDRESS ||
+                ethers.constants.AddressZero,
+            ]
           ),
         },
       ];

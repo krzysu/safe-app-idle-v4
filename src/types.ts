@@ -28,12 +28,9 @@ export enum Token {
   WBTC = "wbtc",
 }
 
-export interface Identifier {
+export interface TokenBasicData {
   strategyId: Strategy;
   tokenId: Token;
-}
-
-export interface TokenBasicData extends Identifier {
   address: string;
   decimals: number;
   logo: string;
@@ -56,11 +53,6 @@ export interface TxData {
   tokenId: Token;
   strategyId: Strategy;
   amountWei: ethers.BigNumber;
-}
-
-export interface Contracts extends Identifier {
-  idleContract: ethers.Contract;
-  underlyingContract: ethers.Contract;
 }
 
 export interface TokenSelectItem {

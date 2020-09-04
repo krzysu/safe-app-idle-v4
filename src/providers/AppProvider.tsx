@@ -58,11 +58,7 @@ const AppProvider: React.FC = ({ children }) => {
   useEffect(() => {
     if (safeInfo && Object.keys(contracts).length > 0) {
       const run = async () => {
-        const result = await initTokens(
-          contracts,
-          safeInfo.network as Network,
-          safeInfo.safeAddress
-        );
+        const result = await initTokens(contracts, safeInfo.safeAddress);
         dispatch({
           type: Actions.SetTokens,
           payload: result,
@@ -78,7 +74,6 @@ const AppProvider: React.FC = ({ children }) => {
       const run = async () => {
         const result = await initLegacyTokens(
           legacyContracts,
-          safeInfo.network as Network,
           safeInfo.safeAddress
         );
         dispatch({

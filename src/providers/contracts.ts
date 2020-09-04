@@ -3,14 +3,8 @@ import { getIdleTokenId } from "../utils/amounts";
 import { erc20Abi, idleV3Abi, idleV4Abi } from "./abis";
 import tokensV3 from "./tokensV3";
 import tokensV4 from "./tokensV4";
-import {
-  Contracts,
-  TokenData,
-  TokenBasicData,
-  Network,
-  Identifier,
-} from "../types";
-import { Version } from "./types";
+import { TokenData, TokenBasicData, Network } from "../types";
+import { Contracts, Version } from "./types";
 
 const tokensVersionMap = {
   [Version.V3]: tokensV3,
@@ -45,18 +39,17 @@ const initContract = async (
   );
 
   return {
-    tokenId: token.tokenId,
-    strategyId: token.strategyId,
+    ...token,
     idleContract,
     underlyingContract,
   };
 };
 
 const initToken = async (
-  { idleContract, underlyingContract }: Contracts,
-  safeAddress: string,
-  token: TokenBasicData
+  contract: Contracts,
+  safeAddress: string
 ): Promise<TokenData> => {
+  const { idleContract, underlyingContract, ...tokenBasicData } = contract;
   let isPaused = false;
   // rinkeby mocked contracts don't have paused function
   try {
@@ -71,7 +64,7 @@ const initToken = async (
   const underDecimals = await underlyingContract.decimals();
 
   return {
-    ...token,
+    ...tokenBasicData,
     isPaused,
     tokenPrice,
     avgAPR,
@@ -81,16 +74,16 @@ const initToken = async (
     },
     idle: {
       balance: idleBalance,
-      decimals: token.decimals,
+      decimals: tokenBasicData.decimals,
     },
   };
 };
 
 const initLegacyToken = async (
-  { idleContract, underlyingContract }: Contracts,
-  safeAddress: string,
-  token: TokenBasicData
+  contract: Contracts,
+  safeAddress: string
 ): Promise<TokenData | null> => {
+  const { idleContract, underlyingContract, ...tokenBasicData } = contract;
   const idleBalance = await idleContract.balanceOf(safeAddress);
 
   if (idleBalance.eq("0")) {
@@ -102,7 +95,7 @@ const initLegacyToken = async (
 
   // skip unnecessary data
   return {
-    ...token,
+    ...tokenBasicData,
     isPaused: false,
     tokenPrice,
     avgAPR: ethers.BigNumber.from("0"),
@@ -112,12 +105,14 @@ const initLegacyToken = async (
     },
     idle: {
       balance: idleBalance,
-      decimals: token.decimals,
+      decimals: tokenBasicData.decimals,
     },
   };
 };
 
-const arrayToRecord = <T extends Identifier>(items: T[]): Record<string, T> =>
+const arrayToRecord = <T extends TokenBasicData>(
+  items: T[]
+): Record<string, T> =>
   items.reduce((acc, item: T) => {
     acc[getIdleTokenId(item.strategyId, item.tokenId)] = item;
     return acc;
@@ -142,32 +137,24 @@ export const initContracts = async (
 
 export const initTokens = async (
   contracts: Record<string, Contracts>,
-  network: Network,
   safeAddress: string
 ): Promise<Record<string, TokenData>> => {
-  const tokens = tokensV4[network];
-
-  const result = await Promise.all(
-    tokens.map(async (token) => {
-      const id = getIdleTokenId(token.strategyId, token.tokenId);
-      return await initToken(contracts[id], safeAddress, token);
+  const allTokens = await Promise.all(
+    Object.values(contracts).map(async (contract) => {
+      return await initToken(contract, safeAddress);
     })
   );
 
-  return arrayToRecord(result);
+  return arrayToRecord(allTokens);
 };
 
 export const initLegacyTokens = async (
   contracts: Record<string, Contracts>,
-  network: Network,
   safeAddress: string
 ): Promise<Record<string, TokenData>> => {
-  const tokens = tokensV3[network];
-
   const allTokens = await Promise.all(
-    tokens.map(async (token) => {
-      const id = getIdleTokenId(token.strategyId, token.tokenId);
-      return await initLegacyToken(contracts[id], safeAddress, token);
+    Object.values(contracts).map(async (contract) => {
+      return await initLegacyToken(contract, safeAddress);
     })
   );
 

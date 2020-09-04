@@ -1,10 +1,10 @@
 import { ethers } from "ethers";
 import {
-  Contracts,
   Page,
   Strategy,
   StrategySelectItem,
   Token,
+  TokenBasicData,
   TokenData,
   TokenSelectItem,
 } from "../types";
@@ -12,6 +12,11 @@ import {
 export enum Version {
   V3 = "v3",
   V4 = "v4",
+}
+
+export interface Contracts extends TokenBasicData {
+  idleContract: ethers.Contract;
+  underlyingContract: ethers.Contract;
 }
 
 export interface State {

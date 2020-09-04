@@ -56,8 +56,9 @@ const Overview: React.FC = () => {
     <React.Fragment>
       <Header>
         <Text size="lg">
-          Earn the yield you deserve without worry about finding the best
-          option, either if you want to optimize returns or risks. <br />
+          The best place for your money. Choose your strategy and earn the yield
+          you deserve without worry about finding the best option, either if you
+          want to optimize returns or risks.{" "}
           <ExtLink
             href="https://idle.finance/"
             target="_blank"
@@ -65,7 +66,20 @@ const Overview: React.FC = () => {
           >
             Learn more
           </ExtLink>
+          .
         </Text>
+        <Text size="lg">
+          Read also about{" "}
+          <ExtLink
+            href="https://medium.com/@idlefinance/idle-yield-farming-upgrade-18e4bc483c8f"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Yield Farming Upgrade
+          </ExtLink>
+          .
+        </Text>
+
         <RefreshWrapper>
           <Button
             size="md"
