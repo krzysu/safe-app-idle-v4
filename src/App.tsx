@@ -22,9 +22,15 @@ const App: React.FC = () => {
       {currentPage === Page.Withdraw && <Withdraw />}
       <footer>
         <Text size="md">
+          * APR doesn't include the value of governance tokens. Idle protocol is
+          receiving governance tokens while allocating your funds. You will
+          receive an equivalent share of governance tokens when you withdraw
+          your funds.
+        </Text>
+        <Text size="md">
           The source code of this app is available on{" "}
           <a
-            href="https://github.com/krzysu/safe-app-idle-ts"
+            href="https://github.com/krzysu/safe-app-idle-v4"
             target="_blank"
             rel="noopener noreferrer"
           >

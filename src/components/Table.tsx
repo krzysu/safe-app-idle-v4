@@ -44,7 +44,7 @@ const Table: React.FC<Props> = ({ iconSrc, title, tokens }) => {
               <Text size="lg">Deposit balance</Text>
             </th>
             <th>
-              <Text size="lg">APR</Text>
+              <Text size="lg">APR*</Text>
             </th>
             <th></th>
           </tr>

@@ -114,7 +114,7 @@ const Form: React.FC<Props> = ({ onSubmit, onBackClick, formType }) => {
       <div>
         <label className={styles.assetLabel}>
           <Text size="lg">Asset</Text>
-          <Text size="lg">{`APR: ${formatAPR(formToken.avgAPR)}`}</Text>
+          <Text size="lg">{`APR*: ${formatAPR(formToken.avgAPR)}`}</Text>
         </label>
         <TokenSelect
           value={tokenId}
