@@ -9,6 +9,11 @@ import {
   TokenSelectItem,
 } from "../types";
 
+export enum Version {
+  V3 = "v3",
+  V4 = "v4",
+}
+
 export interface State {
   isLoaded: boolean;
   tokens: Record<string, TokenData>;

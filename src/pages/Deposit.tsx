@@ -39,8 +39,9 @@ const Deposit: React.FC = () => {
       ];
 
       appsSdk?.sendTransactions(txs);
+      goToOverview();
     },
-    [appsSdk, contracts]
+    [appsSdk, contracts, goToOverview]
   );
 
   return (

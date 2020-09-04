@@ -9,14 +9,9 @@ import React, {
 import { getIdleTokenId } from "../utils/amounts";
 import { useSafeApp } from "./SafeAppProvider";
 import { initialState, reducer } from "./reducer";
-import {
-  initContracts,
-  initTokens,
-  initLegacyContracts,
-  initLegacyTokens,
-} from "./contracts";
+import { initContracts, initTokens, initLegacyTokens } from "./contracts";
 import { Page, Token, Strategy, Network } from "../types";
-import { State, Actions } from "./types";
+import { State, Actions, Version } from "./types";
 
 const stateCtx = createContext<State>(initialState);
 const dispatchCtx = createContext<Dispatch>({} as Dispatch);
@@ -37,8 +32,12 @@ const AppProvider: React.FC = ({ children }) => {
   useEffect(() => {
     if (safeInfo) {
       const run = async () => {
-        const contractsV4 = await initContracts(safeInfo.network as Network);
-        const contractsV3 = await initLegacyContracts(
+        const contractsV4 = await initContracts(
+          Version.V4,
+          safeInfo.network as Network
+        );
+        const contractsV3 = await initContracts(
+          Version.V3,
           safeInfo.network as Network
         );
 

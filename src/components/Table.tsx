@@ -52,7 +52,7 @@ const Table: React.FC<Props> = ({ iconSrc, title, tokens }) => {
         <tbody>
           {tokens.map((token) => (
             <tr key={token.tokenId}>
-              <td className={styles.tokenNameCol}>
+              <td className={styles.fixedCol}>
                 <div className={styles.tokenName}>
                   <img
                     src={token.logo}
@@ -62,10 +62,10 @@ const Table: React.FC<Props> = ({ iconSrc, title, tokens }) => {
                   <Text size="lg">{token.tokenId.toUpperCase()}</Text>
                 </div>
               </td>
-              <td>
+              <td className={styles.fixedCol}>
                 <Text size="lg">{formatToken(token.underlying)}</Text>
               </td>
-              <td>
+              <td className={styles.fixedCol}>
                 <Text size="lg">{formatDepositBalance(token)}</Text>
               </td>
               <td>

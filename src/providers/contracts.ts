@@ -10,6 +10,17 @@ import {
   Network,
   Identifier,
 } from "../types";
+import { Version } from "./types";
+
+const tokensVersionMap = {
+  [Version.V3]: tokensV3,
+  [Version.V4]: tokensV4,
+};
+
+const abiVersionMap = {
+  [Version.V3]: idleV3Abi,
+  [Version.V4]: idleV4Abi,
+};
 
 const getProvider = (network: Network = "rinkeby") => {
   const provider = new ethers.providers.JsonRpcProvider(
@@ -20,9 +31,10 @@ const getProvider = (network: Network = "rinkeby") => {
 
 const initContract = async (
   provider: ethers.providers.JsonRpcProvider,
-  token: TokenBasicData
+  token: TokenBasicData,
+  abi: ethers.ContractInterface
 ): Promise<Contracts> => {
-  const idleContract = new ethers.Contract(token.address, idleV4Abi, provider);
+  const idleContract = new ethers.Contract(token.address, abi, provider);
 
   const underlyingAddress = await idleContract.token();
 
@@ -37,20 +49,6 @@ const initContract = async (
     strategyId: token.strategyId,
     idleContract,
     underlyingContract,
-  };
-};
-
-const initLegacyContract = async (
-  provider: ethers.providers.JsonRpcProvider,
-  token: TokenBasicData
-): Promise<Contracts> => {
-  const idleContract = new ethers.Contract(token.address, idleV3Abi, provider);
-
-  return {
-    tokenId: token.tokenId,
-    strategyId: token.strategyId,
-    idleContract,
-    underlyingContract: idleContract, // ignore
   };
 };
 
@@ -89,16 +87,18 @@ const initToken = async (
 };
 
 const initLegacyToken = async (
-  { idleContract }: Contracts,
+  { idleContract, underlyingContract }: Contracts,
   safeAddress: string,
   token: TokenBasicData
 ): Promise<TokenData | null> => {
   const idleBalance = await idleContract.balanceOf(safeAddress);
-  const tokenPrice = await idleContract.tokenPrice();
 
   if (idleBalance.eq("0")) {
     return null;
   }
+
+  const tokenPrice = await idleContract.tokenPrice();
+  const underDecimals = await underlyingContract.decimals();
 
   // skip unnecessary data
   return {
@@ -108,7 +108,7 @@ const initLegacyToken = async (
     avgAPR: ethers.BigNumber.from("0"),
     underlying: {
       balance: ethers.BigNumber.from("0"),
-      decimals: 18,
+      decimals: underDecimals,
     },
     idle: {
       balance: idleBalance,
@@ -124,29 +124,16 @@ const arrayToRecord = <T extends Identifier>(items: T[]): Record<string, T> =>
   }, {} as Record<string, T>);
 
 export const initContracts = async (
+  version: Version,
   network: Network
 ): Promise<Record<string, Contracts>> => {
   const provider = getProvider(network);
-  const tokens = tokensV4[network];
+  const tokens = tokensVersionMap[version][network];
+  const abi = abiVersionMap[version];
 
   const result = await Promise.all(
     tokens.map(async (token) => {
-      return await initContract(provider, token);
-    })
-  );
-
-  return arrayToRecord(result);
-};
-
-export const initLegacyContracts = async (
-  network: Network
-): Promise<Record<string, Contracts>> => {
-  const provider = getProvider(network);
-  const tokens = tokensV3[network];
-
-  const result = await Promise.all(
-    tokens.map(async (token) => {
-      return await initLegacyContract(provider, token);
+      return await initContract(provider, token, abi);
     })
   );
 
