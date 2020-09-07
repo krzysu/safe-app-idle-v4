@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import { Button, Text } from "@gnosis.pm/safe-react-components";
-import { useAppDispatch } from "../providers/AppProvider";
+import { useAppDispatch } from "../providers/app/AppProvider";
 import { formatToken, formatAPR, formatDepositBalance } from "../utils/amounts";
 import { Balance, TokenData, Page } from "../types";
 
@@ -24,6 +24,11 @@ const Table: React.FC<Props> = ({ iconSrc, title, tokens }) => {
 
   const goToWithdraw = useCallback(
     (tokenId, strategyId) => () => goToPage(Page.Withdraw, tokenId, strategyId),
+    [goToPage]
+  );
+
+  const goToDetails = useCallback(
+    (tokenId, strategyId) => () => goToPage(Page.Details, tokenId, strategyId),
     [goToPage]
   );
 
@@ -66,7 +71,16 @@ const Table: React.FC<Props> = ({ iconSrc, title, tokens }) => {
                 <Text size="lg">{formatToken(token.underlying)}</Text>
               </td>
               <td className={styles.fixedCol}>
-                <Text size="lg">{formatDepositBalance(token)}</Text>
+                {hasZeroBalance(token.idle) ? (
+                  <Text size="lg">{formatDepositBalance(token)}</Text>
+                ) : (
+                  <button
+                    className={styles.buttonLink}
+                    onClick={goToDetails(token.tokenId, token.strategyId)}
+                  >
+                    <Text size="lg">{formatDepositBalance(token)}</Text>
+                  </button>
+                )}
               </td>
               <td>
                 <Text size="lg">{formatAPR(token.avgAPR)}</Text>

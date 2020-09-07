@@ -1,9 +1,9 @@
-import { getIdleTokenId } from "../utils/amounts";
+import { getIdleTokenId } from "../../utils/amounts";
 import {
   buildTokenSelectItems,
   buildStrategySelectItems,
-} from "../utils/buildSelectItems";
-import { Page, TokenData } from "../types";
+} from "../../utils/buildSelectItems";
+import { Page, TokenData } from "../../types";
 import { Action, Actions, State, UpdateTokenPricePayload } from "./types";
 
 export const initialState: State = {

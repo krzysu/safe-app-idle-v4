@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import styled from "styled-components";
 import { Button, Text } from "@gnosis.pm/safe-react-components";
-import { useAppState } from "../providers/AppProvider";
+import { useAppState } from "../providers/app/AppProvider";
 import Table from "../components/Table";
 import MigrationTable from "../components/MigrationTable";
 import { Strategy, TokenData } from "../types";

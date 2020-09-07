@@ -36,3 +36,11 @@
 .buttonWrap {
   margin-left: 0.5rem;
 }
+
+.buttonLink {
+  padding: 0;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  text-decoration: underline;
+}

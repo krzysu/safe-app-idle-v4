@@ -7,7 +7,7 @@ import {
   TokenBasicData,
   TokenData,
   TokenSelectItem,
-} from "../types";
+} from "../../types";
 
 export enum Version {
   V3 = "v3",

@@ -5,7 +5,7 @@ import { theme } from "@gnosis.pm/safe-react-components";
 
 import GlobalStyle from "./components/GlobalStyle";
 import SafeAppProvider from "./providers/SafeAppProvider";
-import AppProvider from "./providers/AppProvider";
+import AppProvider from "./providers/app/AppProvider";
 import App from "./App";
 
 ReactDOM.render(

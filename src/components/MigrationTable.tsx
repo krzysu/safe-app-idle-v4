@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { Button, Text } from "@gnosis.pm/safe-react-components";
 import { useSafeApp } from "../providers/SafeAppProvider";
-import { useAppState } from "../providers/AppProvider";
+import { useAppState } from "../providers/app/AppProvider";
 import { formatDepositBalance, getIdleTokenId } from "../utils/amounts";
 import { TokenData, Token, Strategy } from "../types";
 

@@ -3,7 +3,7 @@ import { ethers } from "ethers";
 import { Title } from "@gnosis.pm/safe-react-components";
 import { Form as FormType, TxData, Page } from "../types";
 import { useSafeApp } from "../providers/SafeAppProvider";
-import { useAppState, useAppDispatch } from "../providers/AppProvider";
+import { useAppState, useAppDispatch } from "../providers/app/AppProvider";
 import { getIdleTokenId } from "../utils/amounts";
 import Form from "../components/Form";
 

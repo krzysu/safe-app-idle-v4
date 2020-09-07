@@ -1,9 +1,9 @@
 import { ethers } from "ethers";
-import { getIdleTokenId } from "../utils/amounts";
-import { erc20Abi, idleV3Abi, idleV4Abi } from "./abis";
-import tokensV3 from "./tokensV3";
-import tokensV4 from "./tokensV4";
-import { TokenData, TokenBasicData, Network } from "../types";
+import { getIdleTokenId } from "../../utils/amounts";
+import { erc20Abi, idleV3Abi, idleV4Abi } from "../abis";
+import tokensV3 from "../tokensV3";
+import tokensV4 from "../tokensV4";
+import { TokenData, TokenBasicData, Network } from "../../types";
 import { Contracts, Version } from "./types";
 
 const tokensVersionMap = {

@@ -6,11 +6,11 @@ import React, {
   useReducer,
   useEffect,
 } from "react";
-import { getIdleTokenId } from "../utils/amounts";
-import { useSafeApp } from "./SafeAppProvider";
+import { getIdleTokenId } from "../../utils/amounts";
+import { useSafeApp } from "../SafeAppProvider";
 import { initialState, reducer } from "./reducer";
 import { initContracts, initTokens, initLegacyTokens } from "./contracts";
-import { Page, Token, Strategy, Network } from "../types";
+import { Page, Token, Strategy, Network } from "../../types";
 import { State, Actions, Version } from "./types";
 
 const stateCtx = createContext<State>(initialState);

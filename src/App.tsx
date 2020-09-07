@@ -1,11 +1,13 @@
 import React from "react";
 import { Loader, Text } from "@gnosis.pm/safe-react-components";
-import { useAppState } from "./providers/AppProvider";
+import { useAppState } from "./providers/app/AppProvider";
+import DetailsProvider from "./providers/details/DetailsProvider";
 import { Page } from "./types";
 import Header from "./components/Header";
 import Overview from "./pages/Overview";
 import Withdraw from "./pages/Withdraw";
 import Deposit from "./pages/Deposit";
+import Details from "./pages/Details";
 
 const App: React.FC = () => {
   const { isLoaded, currentPage } = useAppState();
@@ -20,6 +22,11 @@ const App: React.FC = () => {
       {currentPage === Page.Overview && <Overview />}
       {currentPage === Page.Deposit && <Deposit />}
       {currentPage === Page.Withdraw && <Withdraw />}
+      {currentPage === Page.Details && (
+        <DetailsProvider>
+          <Details />
+        </DetailsProvider>
+      )}
       <footer>
         <Text size="md">
           * APR doesn't include the value of governance tokens. Idle protocol is

@@ -12,6 +12,7 @@ export enum Page {
   Overview = "Overview",
   Deposit = "Deposit",
   Withdraw = "Withdraw",
+  Details = "Details",
 }
 
 export enum Form {

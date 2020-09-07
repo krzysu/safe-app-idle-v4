@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button, Text, TextField } from "@gnosis.pm/safe-react-components";
-import { useAppState, useAppDispatch } from "../providers/AppProvider";
+import { useAppState, useAppDispatch } from "../providers/app/AppProvider";
 import {
   BNify,
   calculateMaxAmountBN,
