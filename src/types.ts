@@ -1,7 +1,4 @@
 import { ethers } from "ethers";
-import { Networks } from "@gnosis.pm/safe-apps-sdk";
-
-export type Network = Extract<Networks, "mainnet" | "rinkeby">;
 
 export enum Strategy {
   BestYield = "BestYield",

@@ -3,7 +3,8 @@ import { getIdleTokenId } from "../../utils/amounts";
 import { erc20Abi, idleV3Abi, idleV4Abi } from "../abis";
 import tokensV3 from "../tokensV3";
 import tokensV4 from "../tokensV4";
-import { TokenData, TokenBasicData, Network } from "../../types";
+import { TokenData, TokenBasicData } from "../../types";
+import { Network } from "../SafeAppProvider";
 import { Contracts, Version } from "./types";
 
 const tokensVersionMap = {
@@ -14,13 +15,6 @@ const tokensVersionMap = {
 const abiVersionMap = {
   [Version.V3]: idleV3Abi,
   [Version.V4]: idleV4Abi,
-};
-
-const getProvider = (network: Network = "rinkeby") => {
-  const provider = new ethers.providers.JsonRpcProvider(
-    `https://${network}.infura.io/v3/${process.env.REACT_APP_INFURA_ID}`
-  );
-  return provider;
 };
 
 const initContract = async (
@@ -119,10 +113,10 @@ const arrayToRecord = <T extends TokenBasicData>(
   }, {} as Record<string, T>);
 
 export const initContracts = async (
+  provider: ethers.providers.JsonRpcProvider,
   version: Version,
   network: Network
 ): Promise<Record<string, Contracts>> => {
-  const provider = getProvider(network);
   const tokens = tokensVersionMap[version][network];
   const abi = abiVersionMap[version];
 

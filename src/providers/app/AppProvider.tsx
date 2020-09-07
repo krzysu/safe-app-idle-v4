@@ -7,10 +7,10 @@ import React, {
   useEffect,
 } from "react";
 import { getIdleTokenId } from "../../utils/amounts";
-import { useSafeApp } from "../SafeAppProvider";
+import { useSafeApp, Network } from "../SafeAppProvider";
 import { initialState, reducer } from "./reducer";
 import { initContracts, initTokens, initLegacyTokens } from "./contracts";
-import { Page, Token, Strategy, Network } from "../../types";
+import { Page, Token, Strategy } from "../../types";
 import { State, Actions, Version } from "./types";
 
 const stateCtx = createContext<State>(initialState);
@@ -26,17 +26,19 @@ interface Dispatch {
 
 const AppProvider: React.FC = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const { safeInfo } = useSafeApp();
+  const { safeInfo, provider } = useSafeApp();
   const { contracts, legacyContracts } = state;
 
   useEffect(() => {
-    if (safeInfo) {
+    if (safeInfo && provider) {
       const run = async () => {
         const contractsV4 = await initContracts(
+          provider,
           Version.V4,
           safeInfo.network as Network
         );
         const contractsV3 = await initContracts(
+          provider,
           Version.V3,
           safeInfo.network as Network
         );
@@ -53,7 +55,7 @@ const AppProvider: React.FC = ({ children }) => {
 
       run();
     }
-  }, [safeInfo]);
+  }, [safeInfo, provider]);
 
   useEffect(() => {
     if (safeInfo && Object.keys(contracts).length > 0) {
