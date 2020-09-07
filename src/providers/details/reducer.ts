@@ -2,6 +2,8 @@ import { Action, Actions, State } from "./types";
 
 export const initialState: State = {
   isLoaded: false,
+  helperContract: undefined,
+  token: undefined,
 };
 
 export const reducer = (state: State, action: Action): State => {
@@ -10,6 +12,7 @@ export const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         isLoaded: true,
+        ...action.payload,
       };
 
     default:
