@@ -39,12 +39,7 @@ const mainnet: TokenBasicData[] = [
 
 // I deployed a few Idle mocked contracts on rinkeby
 const rinkeby: TokenBasicData[] = [
-  buildBestDai("0xb20567b77AF55Cd4462941Eb9c9F2bFd734dF84f"),
-  buildBestUsdc("0x7C5E9E8f8Cedba477Efd1eA461aB2e54684C9897"),
-  // buildBestUsdt("0x728d6b9940F74B23CAa86a6afA7ea05Cc9d8A51F"),
-  // buildRiskDai("0xb20567b77AF55Cd4462941Eb9c9F2bFd734dF84f"),
-  // buildRiskUsdc("0x7C5E9E8f8Cedba477Efd1eA461aB2e54684C9897"),
-  buildRiskUsdt("0x728d6b9940F74B23CAa86a6afA7ea05Cc9d8A51F"),
+  buildBestDai("0x9Ea007843318B9EcD85f93eCC55D4e19143f007A"),
 ];
 
 export default {
