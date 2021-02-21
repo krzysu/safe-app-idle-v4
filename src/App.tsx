@@ -1,4 +1,5 @@
 import React from "react";
+import styled from "styled-components";
 import { Loader, Text } from "@gnosis.pm/safe-react-components";
 import { useAppState } from "./providers/AppProvider";
 import { Page } from "./types";
@@ -6,6 +7,10 @@ import Header from "./components/Header";
 import Overview from "./pages/Overview";
 import Withdraw from "./pages/Withdraw";
 import Deposit from "./pages/Deposit";
+
+const Container = styled.div`
+  padding: 24px;
+`;
 
 const App: React.FC = () => {
   const { isLoaded, currentPage } = useAppState();
@@ -15,7 +20,7 @@ const App: React.FC = () => {
   }
 
   return (
-    <React.Fragment>
+    <Container>
       <Header />
       {currentPage === Page.Overview && <Overview />}
       {currentPage === Page.Deposit && <Deposit />}
@@ -38,7 +43,7 @@ const App: React.FC = () => {
           </a>
         </Text>
       </footer>
-    </React.Fragment>
+    </Container>
   );
 };
 
